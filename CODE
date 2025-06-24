@@ -1,0 +1,55 @@
+# Ariel-Web
+SubDomain-Finder
+
+import requests
+import pyfiglet
+from colorama import init, Fore, Style
+
+# Initialize colorama
+init(autoreset=True)
+
+
+def print_banner():
+    banner = pyfiglet.figlet_format("ArielWeb")
+    print(Fore.RED + banner)
+
+
+def find_subdomains(domain, subdomains):
+    print(f"\n{Fore.CYAN}[+] Finding subdomains for: {domain}\n")
+
+    found = []
+
+    for sub in subdomains:
+        url = f"http://{sub}.{domain}"
+        try:
+            response = requests.get(url, timeout=2)
+            print(Fore.GREEN + f"[+] Found: {url}")
+            found.append(url)
+        except requests.ConnectionError:
+            pass  # Subdomain does not exist (or isn't up)
+
+    if not found:
+        print(Fore.YELLOW + "[!] No subdomains found.")
+    else:
+        print(Fore.CYAN + f"\n[✓] Found {len(found)} subdomains.")
+
+
+if __name__ == "__main__":
+    print_banner()
+
+    # Ask for domain
+    domain = input(Fore.WHITE + "Enter target domain: ").strip()
+
+    # Predefined wordlist to check
+    default_wordlist = [
+        "www", "mail", "ftp", "cpanel", "webmail", "dev", "test", "api", "portal", "blog"
+    ]
+
+    # You could also load from a file instead like this:
+    # with open("subdomains.txt", "r") as f:
+    #     default_wordlist = f.read().splitlines()
+
+    find_subdomains(domain, default_wordlist)
+
+	
+

@@ -1,2 +1,0 @@
-# Ariel-Web
-SubDomain-Finder
